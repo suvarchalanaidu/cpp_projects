@@ -21,6 +21,10 @@ class LRUcache{
     
     LRUcache(int capacity)
     {
+        if(capacity == 0 )
+        {
+            throw std::invalid_argument("Capacity cannot be 0");
+        }
         cap = capacity;
     }
     
@@ -28,7 +32,9 @@ class LRUcache{
     {
         if(cacheMap.find(key) != cacheMap.end())
         {
+            //list.erase returns iterator
             cachelist.erase(cacheMap[key]); //remove it from current position
+            cacheMap.erase(key); //erase from map also so no duplicates are allowed
         }
         else if(cachelist.size() >= cap)
         {
@@ -59,11 +65,16 @@ int main()
     lru.access(9);
     lru.access(10);
     lru.display();
-    lru.access(2);
-    lru.access(3);
-    lru.access(13);
+    lru.access(10);
+    lru.access(9);
+    lru.access(9);
     lru.access(100);
     lru.display();
 
     return 0;
 }
+
+/*validation gaps in my code
+1. Duplicate access of key already in cache
+2. What when capacity =0
+3.*/
